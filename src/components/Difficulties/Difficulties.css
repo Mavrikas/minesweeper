@@ -1,0 +1,41 @@
+.diffs__container {
+	width: 350px;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	margin: 0 20px;
+}
+.diffs__label {
+	font-size: 26px;
+	font-weight: 700;
+}
+.p-dropdown,
+.p-dropdown-open {
+	width: 150px;
+}
+.p-dropdown-label {
+	font-size: 26px;
+	font-weight: 700;
+}
+.p-dropdown-items-wrapper {
+	background-color: rgb(33, 32, 32);
+	border-radius: 5px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	text-align: center;
+}
+.p-dropdown-trigger {
+	padding: 8px 5px 0 5px;
+}
+.p-dropdown-trigger > svg {
+	width: 18px;
+	height: 18px;
+}
+.p-dropdown-items {
+	font-size: 24px;
+	font-weight: 600;
+	color: white;
+}
+.p-dropdown-item:hover {
+	font-weight: 700;
+}

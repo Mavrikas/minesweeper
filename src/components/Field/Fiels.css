@@ -1,0 +1,38 @@
+.container {
+	--cell-width: 30px;
+	--cell-border-width: 2px;
+	--cell-count-easy: 9;
+	--cell-count-medium: 16;
+	--cell-count-hard: 30;
+
+	display: flex;
+	flex-direction: row;
+	flex-flow: row wrap;
+	margin-top: 100px;
+	/* width: 100px; */
+}
+.container--Easy {
+	width: calc(
+		var(--cell-count-easy) * (var(--cell-width) + var(--cell-border-width))
+	);
+}
+.container--Medium {
+	width: calc(
+		var(--cell-count-medium) * (var(--cell-width) + var(--cell-border-width))
+	);
+}
+.container--Hard {
+	width: calc(
+		var(--cell-count-hard) * (var(--cell-width) + var(--cell-border-width))
+	);
+}
+
+.cell {
+	border: 1px solid black;
+	width: var(--cell-width);
+	height: var(--cell-width);
+	cursor: pointer;
+}
+.cell:hover {
+	box-shadow: inset 0 0 5px lightgray;
+}
