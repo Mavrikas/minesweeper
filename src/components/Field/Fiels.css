@@ -9,7 +9,6 @@
 	flex-direction: row;
 	flex-flow: row wrap;
 	margin-top: 100px;
-	/* width: 100px; */
 }
 .container--Easy {
 	width: calc(
@@ -43,4 +42,28 @@
 
 .cell.closed {
 	background-color: rgb(120, 119, 119);
+}
+
+.p-dialog {
+	width: 300px;
+	height: 250px;
+	background-color: white;
+	padding: 15px;
+	border-radius: 10px;
+}
+.p-dialog-header {
+	text-align: center;
+}
+.p-dialog-title {
+	font-size: 24px;
+	font-weight: 700;
+}
+
+.dialogContent {
+	text-align: center;
+	font-size: 22px;
+	font-weight: 500;
+}
+.p-dialog-footer {
+	text-align: center;
 }

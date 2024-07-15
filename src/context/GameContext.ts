@@ -1,9 +1,9 @@
-import { createContext, useState } from 'react';
-import { DIFFICULTIES } from '../constants';
-
-// export const [diff, setDiff] = useState(DIFFICULTIES[0]);
+import { createContext } from 'react';
+import { GAME_STATE } from '../constants';
 
 export const GameContext = createContext({
 	startedOn: Date.now(),
 	setStartedOn: (d: any) => d,
+	gameState: GAME_STATE.PLAYING,
+	setGameState: (d: any) => d,
 });

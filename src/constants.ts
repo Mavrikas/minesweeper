@@ -21,8 +21,14 @@ export const DIFFICULTIES = [
 	},
 ];
 
-export const NAMES = {
-	MINE: 'has-mine',
-	HAS_NEAR: 'has_near',
-	EMPTY: 'empty',
-};
+export const enum NAMES {
+	MINE = 'has-mine',
+	HAS_NEAR = 'has_near',
+	EMPTY = 'empty',
+}
+
+export const enum GAME_STATE {
+	PLAYING = 0,
+	WIN = 1,
+	LOSE = 2,
+}

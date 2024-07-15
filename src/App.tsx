@@ -1,21 +1,19 @@
-import { createContext, useContext, useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
+import { useState } from 'react';
 import './App.css';
 import Menu from './components/Menu/Menu';
 import { PrimeReactProvider } from 'primereact/api';
 import Field from './components/Field/Field';
-import { DIFFICULTIES } from './constants';
+import { DIFFICULTIES, GAME_STATE } from './constants';
 import { DiffContext } from './context/DiffContext';
 import { GameContext } from './context/GameContext';
-
-// export const DiffContext = createContext(DIFFICULTIES[0]);
 
 function App() {
 	const [diff, setDiff] = useState(DIFFICULTIES[0]);
 	const [startedOn, setStartedOn] = useState(Date.now());
+	const [gameState, setGameState] = useState(GAME_STATE.PLAYING);
 	const value = { diff, setDiff };
-	const gameValue = { startedOn, setStartedOn };
+	const gameValue = { startedOn, setStartedOn, gameState, setGameState };
+
 	return (
 		<PrimeReactProvider>
 			<GameContext.Provider value={gameValue}>

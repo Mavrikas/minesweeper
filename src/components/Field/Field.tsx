@@ -1,14 +1,17 @@
 import { useContext, useEffect, useState } from 'react';
 import './Fiels.css';
 import { DiffContext } from '../../context/DiffContext';
-import { NAMES } from '../../constants';
+import { GAME_STATE, NAMES } from '../../constants';
 import { GameContext } from '../../context/GameContext';
 import Mine from '../Mine/Mine';
 import Flag from '../Flag/Flag';
+import { Dialog } from 'primereact/dialog';
+import { Button } from 'primereact/button';
 
 function Field() {
 	const { diff } = useContext(DiffContext);
-	const { startedOn } = useContext(GameContext);
+	const { startedOn, setStartedOn, gameState, setGameState } =
+		useContext(GameContext);
 	const {
 		mines: conMines,
 		width: conWidth,
@@ -24,6 +27,7 @@ function Field() {
 	const [name, setName] = useState('');
 	const [size, setSize] = useState(0);
 	const [flaggedCells, setFlaggedCells] = useState<Array<number>>([]);
+	const [visible, setVisible] = useState(false);
 
 	const getMinePositions = () => {
 		let positions: number[] = [];
@@ -58,6 +62,16 @@ function Field() {
 	useEffect(() => {
 		reset();
 	}, [startedOn]);
+
+	useEffect(() => {
+		setVisible(gameState !== GAME_STATE.PLAYING);
+	}, [gameState]);
+
+	useEffect(() => {
+		if (size > 0 && opened.length + flaggedCells.length === size) {
+			setGameState(GAME_STATE.WIN);
+		}
+	}, [opened, flaggedCells]);
 
 	const handleRightClick = (event: any) => {
 		event.preventDefault();
@@ -128,12 +142,12 @@ function Field() {
 		return NAMES.EMPTY;
 	};
 
-	//TEMP FUNCTION
 	const getCellView = (i: number, column: number, row: number) => {
+		const numOfNearMines = getNumOfMinesNear(i, column, row);
 		if (minePositions.includes(i)) {
 			return <Mine />;
-		} else if (getNumOfMinesNear(i, column, row)) {
-			return getNumOfMinesNear(i, column, row);
+		} else if (numOfNearMines) {
+			return numOfNearMines;
 		}
 		return '';
 	};
@@ -182,13 +196,13 @@ function Field() {
 		const column = event.target.dataset.column;
 		const row = event.target.dataset.row;
 		if (name === NAMES.MINE) {
-			console.log('BOOM');
-		} else if (name.includes(NAMES.HAS_NEAR)) {
-			console.log('open this');
-		} else {
+			setGameState(GAME_STATE.LOSE);
+		} else if (!name.includes(NAMES.HAS_NEAR)) {
+			findFreeNeighbors(pos, column, row);
+		} /*else {
 			console.log('open many');
 			findFreeNeighbors(pos, column, row);
-		}
+		}*/
 	};
 
 	const getCellContent = (
@@ -234,7 +248,43 @@ function Field() {
 		return field;
 	};
 
-	return <div className={`container container--${name}`}>{printField()}</div>;
+	const getDialogHeader = () => {
+		if (gameState === GAME_STATE.WIN) {
+			return 'Win!';
+		} else if (gameState === GAME_STATE.LOSE) {
+			return 'Oops...!';
+		}
+	};
+
+	const getDialogContent = () => {
+		if (gameState === GAME_STATE.WIN) {
+			return 'You made it!';
+		} else if (gameState === GAME_STATE.LOSE) {
+			return 'You lost...';
+		}
+		return '';
+	};
+	const newGame = () => {
+		setVisible(false);
+		setStartedOn(Date.now());
+		setGameState(GAME_STATE.PLAYING);
+	};
+
+	return (
+		<div className={`container container--${name}`}>
+			<Dialog
+				visible={visible}
+				modal
+				header={getDialogHeader}
+				footer={<Button label="New Game" onClick={newGame} autoFocus />}
+				onHide={newGame}
+				closable={false}
+			>
+				<p className="dialogContent">{getDialogContent()}</p>
+			</Dialog>
+			{printField()}
+		</div>
+	);
 }
 
 export default Field;
