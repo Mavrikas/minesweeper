@@ -3,6 +3,8 @@ import './Fiels.css';
 import { DiffContext } from '../../context/DiffContext';
 import { NAMES } from '../../constants';
 import { GameContext } from '../../context/GameContext';
+import Mine from '../Mine/Mine';
+import Flag from '../Flag/Flag';
 
 function Field() {
 	const { diff } = useContext(DiffContext);
@@ -21,6 +23,7 @@ function Field() {
 	const [mines, setMines] = useState(0);
 	const [name, setName] = useState('');
 	const [size, setSize] = useState(0);
+	const [flaggedCells, setFlaggedCells] = useState<Array<number>>([]);
 
 	const getMinePositions = () => {
 		let positions: number[] = [];
@@ -45,6 +48,7 @@ function Field() {
 		setMines(conMines);
 		setName(conName);
 		setSize(conWidth * conHeight);
+		setFlaggedCells([]);
 	};
 
 	useEffect(() => {
@@ -54,6 +58,30 @@ function Field() {
 	useEffect(() => {
 		reset();
 	}, [startedOn]);
+
+	const handleRightClick = (event: any) => {
+		event.preventDefault();
+		let elId = event.target!.id;
+
+		if (elId.includes('i')) {
+			elId = event.target!.id.replace('i', '');
+		} else if (elId.includes('f')) {
+			elId = event.target!.id.replace('i', '');
+		} else {
+			elId = event.target.parentElement.id.replace('i', '');
+		}
+
+		const cellIndex = Number(elId);
+		const tempFlagged = [...flaggedCells];
+
+		if (tempFlagged.includes(cellIndex)) {
+			tempFlagged.splice(tempFlagged.indexOf(cellIndex), 1);
+		} else {
+			tempFlagged.push(cellIndex);
+		}
+
+		setFlaggedCells(tempFlagged);
+	};
 
 	const getNeighborCells = (i: number, column: number, row: number) => {
 		const neighborCells = [];
@@ -103,11 +131,11 @@ function Field() {
 	//TEMP FUNCTION
 	const getCellView = (i: number, column: number, row: number) => {
 		if (minePositions.includes(i)) {
-			return 'M';
+			return <Mine />;
 		} else if (getNumOfMinesNear(i, column, row)) {
 			return getNumOfMinesNear(i, column, row);
 		}
-		return '0';
+		return '';
 	};
 
 	const findFreeNeighbors = (pos: number, column: number, row: number) => {
@@ -119,6 +147,7 @@ function Field() {
 				if (
 					checked.includes(cellNear) ||
 					opened.includes(cellNear) ||
+					flaggedCells.includes(cellNear) ||
 					free.flat().includes(cellNear)
 				) {
 					continue;
@@ -162,10 +191,24 @@ function Field() {
 		}
 	};
 
+	const getCellContent = (
+		isOpenend: boolean,
+		i: number,
+		column: number,
+		row: number,
+	) => {
+		if (isOpenend) {
+			return getCellView(i, column, row);
+		}
+		return '';
+	};
 	const printField = () => {
 		for (let i = 0; i < size; i++) {
 			const column = (i % width) + 1 === 0 ? width : (i % width) + 1;
 			const row = Math.floor(i / width) + 1;
+			const isOpenend = opened.includes(i);
+			const isFlagged = flaggedCells.includes(i);
+
 			field.push(
 				<div
 					key={'cel' + i}
@@ -173,11 +216,17 @@ function Field() {
 					data-column={column}
 					data-row={row}
 					id={`i${i}`}
-					className={'cell'}
-					onClick={handleClick}
+					className={`cell ${isOpenend ? 'open' : 'closed'}`}
+					onClick={isFlagged ? () => null : handleClick}
+					onContextMenu={
+						isOpenend ? (e) => e.preventDefault() : handleRightClick
+					}
 				>
-					{opened.includes(i) ? getCellView(i, column, row) : ''}
-					{/* {getCellView(i, column, row)} */}
+					{isFlagged ? (
+						<Flag id={`i${i}`} />
+					) : (
+						getCellContent(isOpenend, i, column, row)
+					)}
 				</div>,
 			);
 		}
