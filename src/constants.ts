@@ -22,9 +22,9 @@ export const DIFFICULTIES = [
 ];
 
 export const enum NAMES {
-	MINE = 'has-mine',
-	HAS_NEAR = 'has_near',
-	EMPTY = 'empty',
+	MINE = 'a',
+	HAS_NEAR = 'b',
+	EMPTY = 'c',
 }
 
 export const enum GAME_STATE {
