@@ -101,16 +101,11 @@ function Field() {
 	};
 	const printField = () => {
 		for (let i = 0; i < size; i++) {
-			const column = (i % width) + 1 === 0 ? width : (i % width) + 1;
-			const row = Math.floor(i / width) + 1;
 			const isOpenend = opened.includes(i);
 			const isFlagged = flaggedCells.includes(i);
 			field.push(
 				<div
 					key={'cel' + i}
-					// data-name={getCellName(column, row, width, height, minePositions)}
-					// data-column={column}
-					// data-row={row}
 					id={`i${i}`}
 					className={`cell ${isOpenend ? 'open' : 'closed'}`}
 					onClick={isFlagged ? () => null : handleClick}

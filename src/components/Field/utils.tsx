@@ -1,6 +1,6 @@
 import { NAMES } from '../../constants';
 import Mine from '../Mine/Mine';
-import { MapType } from './types';
+import { MapType } from '../../types';
 
 export const getPositionFromCoords = (
 	column: number,

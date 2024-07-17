@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 import { GAME_STATE } from '../constants';
-import { MapType } from '../components/Field/types';
+import { MapType } from '../types';
 
 type GameContextType = {
 	startedOn: number;
