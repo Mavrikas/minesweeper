@@ -8,5 +8,6 @@ To run it:
 3. `npm run dev`
 
 or
+
 3. `npm run build`
 4. `npm run preview`
