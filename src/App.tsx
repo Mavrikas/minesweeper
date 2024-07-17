@@ -11,8 +11,16 @@ function App() {
 	const [diff, setDiff] = useState(DIFFICULTIES[0]);
 	const [startedOn, setStartedOn] = useState(Date.now());
 	const [gameState, setGameState] = useState(GAME_STATE.PLAYING);
+	const [map, setMap] = useState([]);
 	const value = { diff, setDiff };
-	const gameValue = { startedOn, setStartedOn, gameState, setGameState };
+	const gameValue = {
+		startedOn,
+		setStartedOn,
+		gameState,
+		setGameState,
+		map,
+		setMap,
+	};
 
 	return (
 		<PrimeReactProvider>

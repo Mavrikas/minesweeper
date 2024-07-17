@@ -14,7 +14,7 @@ import EndGameAlert from '../EndGameAlert/EndGameAlert';
 
 function Field() {
 	const { diff } = useContext(DiffContext);
-	const { startedOn, setStartedOn, gameState, setGameState } =
+	const { startedOn, setStartedOn, gameState, setGameState, map, setMap } =
 		useContext(GameContext);
 	const {
 		mines: conMines,
@@ -70,40 +70,47 @@ function Field() {
 	const handleClick = (event: any) => {
 		const pos = Number(event.target.id.replace('i', ''));
 		setOpened((prev) => [...prev, Number(pos)]);
-		const name = event.target.dataset.name;
-		const column = event.target.dataset.column;
-		const row = event.target.dataset.row;
+		const column = map[pos].column;
+		const row = map[pos].row;
+		const name = map[pos].name;
 		if (name === NAMES.MINE) {
 			setGameState(GAME_STATE.LOSE);
 		} else if (!name.includes(NAMES.HAS_NEAR)) {
 			setOpened((prev) => [
 				...prev,
 				...findFreeNeighbors(
-					pos,
 					column,
 					row,
 					width,
 					height,
 					opened,
 					flaggedCells,
+					map,
 				),
 			]);
 		}
 	};
-
+	const createMap = () => {
+		let temp = [];
+		for (let i = 0; i < size; i++) {
+			const column = (i % width) + 1 === 0 ? width : (i % width) + 1;
+			const row = Math.floor(i / width) + 1;
+			temp.push(getCellName(column, row, width, height, minePositions));
+		}
+		setMap(temp);
+	};
 	const printField = () => {
 		for (let i = 0; i < size; i++) {
 			const column = (i % width) + 1 === 0 ? width : (i % width) + 1;
 			const row = Math.floor(i / width) + 1;
 			const isOpenend = opened.includes(i);
 			const isFlagged = flaggedCells.includes(i);
-
 			field.push(
 				<div
 					key={'cel' + i}
-					data-name={getCellName(i, column, row, width, height, minePositions)}
-					data-column={column}
-					data-row={row}
+					// data-name={getCellName(column, row, width, height, minePositions)}
+					// data-column={column}
+					// data-row={row}
 					id={`i${i}`}
 					className={`cell ${isOpenend ? 'open' : 'closed'}`}
 					onClick={isFlagged ? () => null : handleClick}
@@ -114,15 +121,7 @@ function Field() {
 					{isFlagged ? (
 						<Flag id={`i${i}`} />
 					) : (
-						getCellContent(
-							isOpenend,
-							i,
-							column,
-							row,
-							width,
-							height,
-							minePositions,
-						)
+						getCellContent(isOpenend, i, width, height, minePositions, map)
 					)}
 				</div>,
 			);
@@ -140,6 +139,10 @@ function Field() {
 	useEffect(() => {
 		if (mines) setMinePositions(getMinePositions(size, mines));
 	}, [mines, startedOn]);
+
+	useEffect(() => {
+		if (minePositions.length > 0) createMap();
+	}, [minePositions]);
 
 	useEffect(() => {
 		reset();
