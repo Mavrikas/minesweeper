@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import './Difficulties.css';
 import { Dropdown } from 'primereact/dropdown';
 import { DIFFICULTIES } from '../../constants';

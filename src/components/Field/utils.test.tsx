@@ -24,16 +24,16 @@ describe('Field utils', () => {
 	});
 
 	it.each([
-		['middle', 2, 2, [11, 9, 1, 19, 2, 0, 20, 18]],
-		['upper left corner', 1, 1, [1, 9, 10]],
-		['first row mid', 3, 1, [3, 1, 11, 12, 10]],
-		['upper right corner', 9, 1, [7, 17, 16]],
-		['first column second row', 1, 2, [10, 0, 18, 1, 19]],
-		['last column second row', 9, 2, [16, 8, 26, 7, 25]],
-		['lower left corner', 1, 9, [73, 63, 64]],
-		['lower right corner', 9, 9, [79, 71, 70]],
-		['last row mid', 4, 9, [76, 74, 66, 67, 65]],
-	])('getNeighborCells for %s', (name, col, row, expected) => {
+		[2, 2, [11, 9, 1, 19, 2, 0, 20, 18]],
+		[1, 1, [1, 9, 10]],
+		[3, 1, [3, 1, 11, 12, 10]],
+		[9, 1, [7, 17, 16]],
+		[1, 2, [10, 0, 18, 1, 19]],
+		[9, 2, [16, 8, 26, 7, 25]],
+		[1, 9, [73, 63, 64]],
+		[9, 9, [79, 71, 70]],
+		[4, 9, [76, 74, 66, 67, 65]],
+	])('getNeighborCells for column: %s and row: %s', (col, row, expected) => {
 		const width = 9;
 		expect(getNeighborCells(col, row, width, width)).toEqual(expected);
 	});
